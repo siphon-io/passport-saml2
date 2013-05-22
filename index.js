@@ -53,6 +53,10 @@ SAML2Strategy.prototype.authenticate = function(req, options) {
       return this.error(Error("couldn't construct element from tag: " + xml.documentElement.localName));
     }
 
+    if (!element.Status || !element.Status.StatusCode || element.Status.StatusCode.Value !== "urn:oasis:names:tc:SAML:2.0:status:Success") {
+      return this.fail();
+    }
+
     var user = {
       id: element.Assertion.Subject.NameID._content,
     };
