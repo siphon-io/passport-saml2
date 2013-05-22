@@ -71,8 +71,17 @@ SAML2Strategy.prototype.authenticate = function(req, options) {
       }
     }
 
+    var nameId;
+    if (element.Assertion && element.Assertion.Subject && element.Assertion.Subject.NameID) {
+      nameId = element.Assertion.Subject.NameID._content;
+    }
+
+    if (!nameId) {
+      return this.fail();
+    }
+
     var user = {
-      id: element.Assertion.Subject.NameID._content,
+      id: nameId,
     };
 
     return this.success(user);
