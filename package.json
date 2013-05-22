@@ -1,0 +1,37 @@
+{
+  "name": "passport-saml2",
+  "version": "0.0.0",
+  "description": "SAML 2.0 strategy for Passport",
+  "author": {
+    "name": "Siphon.IO",
+    "email": "opensource@siphon.io",
+    "url": "http://www.siphon.io/"
+  },
+  "maintainers": [
+    {
+      "name": "Conrad Pankoff",
+      "email": "deoxxa@fknsrs.biz",
+      "url": "http://www.fknsrs.biz/"
+    }
+  ],
+  "homepage": "https://github.com/siphon-io/passport-saml2",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/siphon-io/passport-saml2.git"
+  },
+  "keywords": [
+    "passport",
+    "siphon",
+    "siphon.io",
+    "saml",
+    "saml2",
+    "saml2.0",
+    "authentication"
+  ],
+  "license": "BSD",
+  "main": "index.js",
+  "dependencies": {
+    "saml2": "~0.0.0",
+    "xmldom": "~0.1.16"
+  }
+}
