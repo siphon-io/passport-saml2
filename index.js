@@ -57,6 +57,20 @@ SAML2Strategy.prototype.authenticate = function(req, options) {
       return this.fail();
     }
 
+    var conditions = element.Assertion.Conditions ? Array.isArray(element.Assertion.Conditions) ? element.Assertion.Conditions : [element.Assertion.Conditions] : [];
+
+    var notBefore, notOnOrAfter;
+
+    for (var i in conditions) {
+      if (conditions[i].NotBefore && (notBefore = new Date(conditions[i].NotBefore)) && !Number.isNaN(notBefore.valueOf()) && notBefore.valueOf() > Date.now()) {
+        return this.fail();
+      }
+
+      if (conditions[i].NotOnOrAfter && (notOnOrAfter = new Date(conditions[i].NotOnOrAfter)) && !Number.isNaN(notOnOrAfter.valueOf()) && notOnOrAfter.valueOf() < Date.now()) {
+        return this.fail();
+      }
+    }
+
     var user = {
       id: element.Assertion.Subject.NameID._content,
     };
