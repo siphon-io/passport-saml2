@@ -80,8 +80,32 @@ SAML2Strategy.prototype.authenticate = function(req, options) {
       return this.fail();
     }
 
+    var attributes;
+    if (element.Assertion && element.Assertion.AttributeStatement && element.Assertion.AttributeStatement.Attribute) {
+      attributes = element.Assertion.AttributeStatement.Attribute;
+
+      if (!Array.isArray(attributes)) {
+        attributes = [attributes];
+      }
+
+      attributes = attributes.map(function(e) {
+        return {
+          name: e.Name,
+          friendlyName: e.FriendlyName,
+          values: (Array.isArray(e.AttributeValue) ? e.AttributeValue : [e.AttributeValue]).map(function(e) {
+            return e._content;
+          }),
+        };
+      }).reduce(function(i, v) {
+        i[v.name] = v.values[0];
+
+        return i;
+      }, {});
+    }
+
     var user = {
       id: nameId,
+      attributes: attributes,
     };
 
     return this.success(user);
