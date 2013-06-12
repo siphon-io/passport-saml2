@@ -32,6 +32,7 @@
   "main": "index.js",
   "dependencies": {
     "saml2": "~0.0.3",
-    "xmldom": "~0.1.16"
+    "xmldom": "~0.1.16",
+    "xml-dsig": "~0.0.1"
   }
 }
