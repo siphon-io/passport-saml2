@@ -31,7 +31,7 @@
   "license": "BSD",
   "main": "index.js",
   "dependencies": {
-    "saml2": "~0.0.0",
+    "saml2": "~0.0.3",
     "xmldom": "~0.1.16"
   }
 }
