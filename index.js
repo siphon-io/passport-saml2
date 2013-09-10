@@ -42,6 +42,7 @@ SAML2Strategy.prototype.initiateRedirect = function initiateRedirect(type, targe
       uri.query.Signature = dsig.signatures[uri.query.SigAlg].sign({privateKey: this.sp.privateKey}, toSign);
     }
 
+    uri.search = null;
     return res.redirect(url.format(uri));
   }.bind(this));
 };
