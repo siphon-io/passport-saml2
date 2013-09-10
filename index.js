@@ -176,7 +176,7 @@ SAML2Strategy.prototype.handleRedirect = function handleRedirect(req, res, next)
     req.samlMessage = message;
 
     return next();
-  });
+  }.bind(this));
 };
 
 SAML2Strategy.prototype.handleMessage = function handleMessage(req, res, next) {
@@ -194,7 +194,7 @@ SAML2Strategy.prototype.handleMessage = function handleMessage(req, res, next) {
     return next(Error("couldn't figure out how to handle this request"));
   }
 
-  fn.call(this, req, function(err, element) {
+  fn.call(this, req, res, function(err, element) {
     if (err) {
       return next(err);
     }
