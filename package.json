@@ -1,6 +1,6 @@
 {
   "name": "passport-saml2",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "SAML 2.0 strategy for Passport",
   "author": {
     "name": "Siphon.IO",
