@@ -1,8 +1,9 @@
-var dsig = require("xml-dsig"),
+var crypto = require("crypto"),
     passport = require("passport"),
     querystring = require("querystring"),
-    url = require("url"),
+    randomId = require("proquint-random-id"),
     saml2 = require("saml2"),
+    url = require("url"),
     xmldom = require("xmldom"),
     zlib = require("zlib");
 
@@ -28,7 +29,7 @@ SAML2Strategy.prototype.initiateRedirect = function initiateRedirect(type, targe
 
     var uri = url.parse(target, true);
     uri.query[type] = deflated.toString("base64");
-    uri.query.RelayState = Date.now() + "-" + Math.round(Math.random() * 1000000);
+    uri.query.RelayState = Date.now() + "-" + randomId();
 
     if (this.sp.privateKey) {
       uri.query.SigAlg = "http://www.w3.org/2000/09/xmldsig#rsa-sha1";
@@ -39,7 +40,7 @@ SAML2Strategy.prototype.initiateRedirect = function initiateRedirect(type, targe
       toSign.SigAlg     = uri.query.SigAlg;
       toSign = querystring.stringify(toSign);
 
-      uri.query.Signature = dsig.signatures[uri.query.SigAlg].sign({privateKey: this.sp.privateKey}, toSign);
+      uri.query.Signature = crypto.createSign("RSA-SHA1").update(toSign).sign(this.sp.privateKey, "base64");
     }
 
     return res.redirect(url.format(uri));
@@ -86,33 +87,26 @@ SAML2Strategy.prototype.handlePost = function handlePost(req, res, next) {
     return next(Error("couldn't parse XML"));
   }
 
-  if (this.idp.certificate) {
-    var valid;
+  return this.idp.verify(xml.documentElement, function(err) {
+    if (err) {
+      return next(err);
+    }
+
+    var message;
     try {
-      valid = this.idp.verify(xml);
+      message = saml2.Protocol.fromXML(xml.documentElement);
     } catch (e) {
       return next(e);
     }
 
-    if (!valid) {
-      return next(Error("signature for IDP response was invalid"));
+    if (!message) {
+      return next(Error("couldn't construct message from tag: " + xml.documentElement.localName));
     }
-  }
 
-  var message;
-  try {
-    message = saml2.Protocol.fromXML(xml.documentElement);
-  } catch (e) {
-    return next(e);
-  }
+    req.samlMessage = message;
 
-  if (!message) {
-    return next(Error("couldn't construct message from tag: " + xml.documentElement.localName));
-  }
-
-  req.samlMessage = message;
-
-  return next();
+    return next();
+  });
 };
 
 SAML2Strategy.prototype.handleRedirect = function handleRedirect(req, res, next) {

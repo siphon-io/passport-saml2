@@ -31,8 +31,9 @@
   "license": "BSD",
   "main": "index.js",
   "dependencies": {
-    "saml2": "~0.0.3",
+    "saml2": "0.0.4",
     "xmldom": "~0.1.16",
-    "xml-dsig": "~0.0.1"
+    "xml-dsig": "0.0.3",
+    "proquint-random-id": "0.0.1"
   }
 }
