@@ -188,15 +188,7 @@ SAML2Strategy.prototype.handleMessage = function handleMessage(req, res, next) {
     return next(Error("couldn't figure out how to handle this request"));
   }
 
-  fn.call(this, req, function(err, element) {
-    if (err) {
-      return next(err);
-    }
-
-    req.samlMessage = element;
-
-    return next();
-  });
+  return fn.call(this, req, res, next);
 };
 
 SAML2Strategy.prototype.authenticate = function(req, options) {
