@@ -1,3 +1,12 @@
+DEPRECATION WARNING
+===================
+
+It's been a long time since this module has seen updates, and it will probably
+not see any more. My [connect-saml2](https://github.com/deoxxa/connect-saml2)
+module is far more robust, and escapes all of the hacky things that had to be
+done to get passport to play nicely with SAML. If you absolutely must use
+passport and SAML, it might be a good idea to look for a different module.
+
 passport-saml2
 ==============
 
