@@ -43,6 +43,7 @@ SAML2Strategy.prototype.initiateRedirect = function initiateRedirect(type, targe
       uri.query.Signature = crypto.createSign("RSA-SHA1").update(toSign).sign(this.sp.privateKey, "base64");
     }
 
+    uri.search = null;
     return res.redirect(url.format(uri));
   }.bind(this));
 };
